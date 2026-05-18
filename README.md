@@ -1,6 +1,6 @@
-# **Sistema Gestor da Pousada Pedra Talhada**
+# **Sistema para Gestão do Paraíso de Búzios Resort**
 
-# **Trabalho de Modelagem de Sistemas - 2025**
+# **Trabalho de Modelagem de Sistemas - 2026**
 
 | **Sumário** |
 |-------------|
@@ -9,18 +9,16 @@
 | [Como Executar o Projeto](#como-executar-o-projeto) |
 
 ### Desenvolvedores:
-* [Ana Carolina Junqueira e Silva](https://github.com/AnaCarolinaJunqueira)
-* [Breno Reis Machado](https://github.com/BrenoRMachado)
-* [Lipe Nunes Cordeiro de Morais](colocar o link do github)
-* [Maria Fernanda Couri Biazollo](https://github.com/fercouri)
-* [Rodrigo da Silva Soares](colocar o link do github)
+* [João Victor Rangel Cardoso](https://github.com/jvrangel11)
+* [Lipe Nunes Cordeiro de Morais](https://github.com/)
+* [Gustavo Borges](https://github.com)
 
 ## Descrição do Projeto
 
-* Sistema web desenvolvido para o **gerenciamento interno de uma pousada de pequeno porte**, denominada **Pousada Pedra Talhada**;
+* Sistema web desenvolvido para o **gerenciamento interno de um resort**, denominado **Paraíso de Búzios**;
 * O sistema tem como objetivo centralizar e informatizar as rotinas operacionais da pousada, como controle de funcionários, hóspedes, reservas, status dos quartos, consumos e fechamento de caixa;
 * O sistema é destinado **exclusivamente ao uso interno**, não contemplando reservas online para o público externo;
-* Projeto desenvolvido como parte da disciplina de **Modelagem de Sistemas**, no ano de **2025**.
+* Projeto desenvolvido como parte da disciplina de **Modelagem de Sistemas**, no ano de **2026**.
 
 ## Como Executar o Projeto
 
