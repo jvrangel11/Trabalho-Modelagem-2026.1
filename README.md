@@ -10,7 +10,7 @@
 
 ### Desenvolvedores:
 * [João Victor Rangel Cardoso](https://github.com/jvrangel11)
-* [Lipe Nunes Cordeiro de Morais](https://github.com/)
+* [Lipe Nunes Cordeiro de Morais](https://github.com/lipeccjf)
 * [Gustavo Borges](https://github.com)
 
 ## Descrição do Projeto
