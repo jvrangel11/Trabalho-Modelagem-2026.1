@@ -2,7 +2,7 @@
 
 return [
     'database' => [
-        'name' => 'pousada_pedra_talhada_db',
+        'name' => 'resort_paraiso_buzios_db',
         'username' => 'root',
         'password' => '',
         'connection' => 'mysql:host=127.0.0.1',
