@@ -8,7 +8,7 @@
 .sidebar{
     width: 12.7vw;
     height: 100vh;
-    background-color: #EEEEEE;
+    background-color: #fdffff;
     display: flex;
     flex-direction: column;
     padding-left: 0.5vw;
@@ -25,18 +25,18 @@
     gap: 1vw;
     padding-left: 0.5vw;
     padding-top: 1vh;
+
+ 
 }
+
+
 
 .sidebar .logo img{
-    width: 2.5vw;
-    height: 2.5vw;
+    width: 10vw;
+    height: 10vw;
 }
 
-.sidebar .logo .nome_pousada{
-    color: #CA643C;
-    font-size: 17px;
-    text-align: center;
-}
+
 
 .nome_pousada span{
     display: block;
@@ -76,19 +76,19 @@
 }
 
 .sidebar_itens li.active a{
-    background-color: #DB864D;
-    color: #FFFFFF;
+    background-color: #4dffff;
+    color: #FDFFFF;
 }
 
 .sidebar_itens li:not(.active) a:hover{
-    background-color: #d6d6d6;
+    background-color: #4dffff;
 }
 
 .sidebar_itens li a.btn-sair {
-    color: #CA643C; 
+    color: #4dffff; 
 }
 
 .sidebar_itens li a.btn-sair:hover {
-    background-color: #CA643C; 
+    background-color: #6defef; 
     color: white
 }
