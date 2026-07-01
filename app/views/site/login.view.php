@@ -20,10 +20,12 @@ if(session_status() === PHP_SESSION_NONE){
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body class="login-page">
+
+    <div class="logo"></div>
     
     <div class="login-container">
-        <h1>Pousada Pedra Talhada</h1>
-        <p>Faça login para continuar</p>
+        <h1>Início</h1>
+      
 
         <form action="/login" method="POST">
             <div class="input-name">
@@ -38,7 +40,7 @@ if(session_status() === PHP_SESSION_NONE){
             <button class="botao-ver" type="button" id="toggleSenha"><i class="fa-regular fa-eye-slash"></i></button>
 
             </div>
-            <button  type="submit">Entrar</button>
+            <button class="entrar" type="submit">Entrar</button>
         </form>
     </div>
 
