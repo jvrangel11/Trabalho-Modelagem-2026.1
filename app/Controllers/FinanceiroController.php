@@ -42,24 +42,7 @@ class FinanceiroController
                 }
             }
 
-            // Contas pagas hoje que ainda não foram contabilizadas
-            $contas = $db->selectWhere('conta', 'STATUS', 'PAGA');
-            foreach ($contas as $conta) {
-                $descricaoMov = "Pagamento Reserva #{$conta->idReserva}";
-                $dataPagamento = date('Y-m-d', strtotime($conta->dataPagamento ?? ''));
-                $jaContabilizada = $db->selectWhere('movimentacaocaixa', 'descricao', $descricaoMov);
-
-                if (!$jaContabilizada && $dataPagamento === $hoje) {
-                    $movimentacoes[] = [
-                        'descricao' => $descricaoMov,
-                        'tipo' => 'ENTRADA',
-                        'valor' => (float)$conta->valorTotal,
-                        'dataHora' => $conta->dataPagamento
-                    ];
-                }
-            }
-
-            // Calcula saldo atual
+            // Calcula saldo atual a partir das movimentações do caixa
             $entradasDia = 0;
             $saidasDia = 0;
             foreach ($movimentacoes as $m) {
@@ -94,6 +77,13 @@ class FinanceiroController
 
         try {
             $db = App::get('database');
+            $caixas = $db->selectWhere('caixadiario', 'idFuncionario', $idFuncionario);
+            $ultimoCaixa = $caixas ? end($caixas) : null;
+            if ($ultimoCaixa && $ultimoCaixa->STATUS === 'ABERTO') {
+                echo json_encode(['success' => false, 'message' => 'Já existe um caixa aberto. Feche-o antes de abrir outro.']);
+                return;
+            }
+
             $idCaixa = $db->insert('caixadiario', $campos);
             echo json_encode(['success' => true, 'valor' => $valorInicial, 'idCaixa' => $idCaixa]);
         } catch (\Exception $e) {
@@ -132,7 +122,8 @@ class FinanceiroController
 
         try {
             $db->insert('movimentacaocaixa', $campos);
-            $novoSaldo = $caixa->saldoFinal - $valor;
+            $caixaAtual = $db->selectWhere('caixadiario', 'id', $caixa->id)[0] ?? null;
+            $novoSaldo = $caixaAtual ? ((float)$caixaAtual->saldoFinal - $valor) : ((float)$caixa->saldoFinal - $valor);
             $db->update('caixadiario', ['saldoFinal' => $novoSaldo], 'id', $caixa->id);
             echo json_encode(['success' => true, 'dataHora' => date('H:i')]);
         } catch (\Exception $e) {

@@ -72,14 +72,63 @@ class CheckoutController
     // Confirmar checkout
     public function confirmar()
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $idReserva = $_POST['idReserva'] ?? null;
         if (!$idReserva) {
-            throw new Exception("Reserva inválida.");
+            $_SESSION['mensagem-erro'] = 'Reserva inválida.';
+            header('Location: /admin/reservas');
+            exit;
         }
 
         $db = App::get('database');
 
-        $reserva = $db->selectWhere('reserva', 'id', $idReserva)[0];
+        $reserva = $db->selectWhere('reserva', 'id', $idReserva)[0] ?? null;
+        if (!$reserva) {
+            $_SESSION['mensagem-erro'] = 'Reserva inválida.';
+            header('Location: /admin/reservas');
+            exit;
+        }
+
+        $conta = $db->selectWhere('conta', 'idReserva', $idReserva)[0] ?? null;
+        if (!$conta) {
+            $_SESSION['mensagem-erro'] = 'Conta não encontrada.';
+            header('Location: /admin/reservas');
+            exit;
+        }
+
+        $quarto = $db->selectWhere('quarto', 'numero', $reserva->idQuarto)[0] ?? null;
+        if (!$quarto) {
+            $_SESSION['mensagem-erro'] = 'Quarto não encontrado.';
+            header('Location: /admin/reservas');
+            exit;
+        }
+
+        // Calcular valor total do checkout
+        $dataEntrada = (new \DateTime($reserva->dataEntradaPrevista))->setTime(0, 0, 0);
+        $dataSaida = (new \DateTime($reserva->dataSaidaPrevista))->setTime(0, 0, 0);
+        $diarias = $dataSaida->diff($dataEntrada)->days;
+        $valorHospedagem = $quarto->precoDiaria ?? 0;
+        $totalHospedagem = $valorHospedagem * $diarias;
+        $taxaServico = $totalHospedagem * 0.1;
+
+        $consumos = $db->selectWhere('itemconsumo', 'idConta', $conta->id);
+        $totalConsumos = 0;
+        foreach ($consumos as $item) {
+            $totalConsumos += $item->quantidade * $item->valorUnitario;
+        }
+
+        $valorTotalReserva = $totalHospedagem + $taxaServico + $totalConsumos;
+
+        // Verificar caixa aberto para registrar o pagamento
+        $idFuncionario = $_SESSION['idFuncionario'] ?? 1;
+        $caixas = $db->selectWhere('caixadiario', 'idFuncionario', $idFuncionario);
+        $caixa = $caixas ? end($caixas) : null;
+        if (!$caixa || $caixa->STATUS !== 'ABERTO') {
+            throw new Exception('Nenhum caixa aberto. Abra o caixa antes de realizar o checkout.');
+        }
 
         // Atualizar reserva como finalizada
         $db->update('reserva', [
@@ -90,8 +139,28 @@ class CheckoutController
         // Atualizar conta como paga E registrar data do pagamento
         $db->update('conta', [
             'STATUS'       => 'PAGA',
-            'dataPagamento'=> date('Y-m-d H:i:s')
-        ], 'idReserva', $idReserva);
+            'dataPagamento'=> date('Y-m-d H:i:s'),
+            'valorTotal'   => $valorTotalReserva
+        ], 'id', $conta->id);
+
+        // Registrar movimentação no caixa aberto
+        $db->insert('movimentacaocaixa', [
+            'tipo'         => 'ENTRADA',
+            'valor'        => $valorTotalReserva,
+            'dataHora'     => date('Y-m-d H:i:s'),
+            'descricao'    => "Pagamento Reserva #{$reserva->id}",
+            'idCaixaDiario'=> $caixa->id,
+            'idConta'      => $conta->id,
+            'idFuncionario'=> $idFuncionario
+        ]);
+
+        // Atualizar saldo final do caixa com o recebimento usando o saldo mais recente
+        $caixaAtual = $db->selectWhere('caixadiario', 'id', $caixa->id)[0] ?? null;
+        if ($caixaAtual) {
+            $db->update('caixadiario', [
+                'saldoFinal' => (float)$caixaAtual->saldoFinal + $valorTotalReserva
+            ], 'id', $caixa->id);
+        }
 
         // Liberar quarto
         $db->update('quarto', [
