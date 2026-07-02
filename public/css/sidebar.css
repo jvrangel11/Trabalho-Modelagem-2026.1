@@ -6,6 +6,9 @@
 }
 
 .sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 12.7vw;
     height: 100vh;
     background-color: #fdffff;
@@ -91,4 +94,12 @@
 .sidebar_itens li a.btn-sair:hover {
     background-color: #6defef; 
     color: white
+}
+
+.app-container main {
+    margin-left: 12.7vw;
+}
+
+.checkout-app-container {
+    margin-left: 12.7vw;
 }

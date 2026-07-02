@@ -62,32 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(res => res.json())
         .then(data => {
             if (data.status === 'success') {
-                // Limpa tabela antes de atualizar
-                tbody.innerHTML = '';
-                totalConsumos = 0;
-
-                // Adiciona cada item novo à tabela
-                data.consumos.forEach(item => {
-                    const totalItem = item.quantidade * item.valorUnitario;
-                    totalConsumos += totalItem;
-
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${item.descricao}</td>
-                        <td>${item.quantidade}</td>
-                        <td>R$ ${item.valorUnitario.toFixed(2).replace('.',',')}</td>
-                        <td><strong>R$ ${totalItem.toFixed(2).replace('.',',')}</strong></td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-
-                // Atualiza o resumo de pagamento
-                atualizarResumo();
-
-                // Limpa inputs
-                descricaoInput.value = '';
-                quantidadeInput.value = '';
-                valorUnitarioInput.value = '';
+                // Recarrega a página para exibir os insumos adicionais imediatamente
+                window.location.reload();
             } else {
                 alert(data.msg || 'Erro ao adicionar consumo');
             }

@@ -46,8 +46,8 @@ class CheckoutController
         $consumos = $conta ? $db->selectWhere('itemconsumo', 'idConta', $conta->id) : [];
 
         // Calcular diárias e valor da hospedagem
-        $dataEntrada = new \DateTime($reserva->dataEntradaPrevista);
-        $dataSaida = new \DateTime($reserva->dataSaidaPrevista);
+        $dataEntrada = (new \DateTime($reserva->dataEntradaPrevista))->setTime(0, 0, 0);
+        $dataSaida = (new \DateTime($reserva->dataSaidaPrevista))->setTime(0, 0, 0);
         $diarias = $dataSaida->diff($dataEntrada)->days;
         $valorHospedagem = $quarto->precoDiaria ?? 0;
 
