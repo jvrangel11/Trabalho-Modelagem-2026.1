@@ -8,10 +8,10 @@
 | [Descrição do Projeto](#descrição-do-projeto) |
 | [Como Executar o Projeto](#como-executar-o-projeto) |
 
-### Desenvolvedores:
-* [João Victor Rangel Cardoso](https://github.com/jvrangel11)
+### Desenvolvedor:
+
 * [Lipe Nunes Cordeiro de Morais](https://github.com/lipeccjf)
-* [Gustavo Borges](https://github.com)
+
 
 ## Descrição do Projeto
 
